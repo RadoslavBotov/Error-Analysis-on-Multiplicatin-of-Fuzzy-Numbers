@@ -22,6 +22,15 @@ class TriangularNumber:
         with open(file, "a") as f:
             f.write(self + '\n')
 
+    def membership(self, x: float) -> float:
+        return self.u.membership(x)
+
+    def alpha_cut_left(self, alpha: float) -> float:
+        return self.u.alpha_cut_left(alpha)
+
+    def alpha_cut_right(self, alpha: float) -> float:
+        return self.u.alpha_cut_right(alpha)
+
     def mul_naive(self, other: "TriangularNumber") -> "TriangularNumber":
         a_new, b_new, c_new = self._calculate_new_values(other)
         return TriangularNumber(a_new, b_new, c_new)
@@ -46,12 +55,3 @@ class TriangularNumber:
         b_new = self.a2 * other.a2
         c_new = self.a3 * other.a3
         return a_new, b_new, c_new
-
-    def membership(self, x: float) -> float:
-        return self.u.membership(x)
-
-    def alpha_cut_left(self, alpha: float) -> float:
-        return self.u.alpha_cut_left(alpha)
-
-    def alpha_cut_right(self, alpha: float) -> float:
-        return self.u.alpha_cut_right(alpha)

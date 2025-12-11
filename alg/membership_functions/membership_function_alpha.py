@@ -1,9 +1,10 @@
 import math
 from typing import override
+
 from .membership_function_base import MembershipFunction
 
 
-class MembershipFunctionAprox(MembershipFunction):
+class MembershipFunctionAlpha(MembershipFunction):
     def __init__(self,
             a1: float, a2: float, a3: float, b1: float, b2: float, b3: float,
             u1: float|None = None, u2: float|None = None, u3: float|None = None,
@@ -26,17 +27,23 @@ class MembershipFunctionAprox(MembershipFunction):
     @override
     def membership(self, x: float) -> float:
         if (self.a1 < x < self.a2):
-            return (x -self.u3) / (self.u1 + self.u2)
+            return self._solve_quadratic(x, self.u1, self.u2, self.u3, True)
         
         if (self.a2 < x < self.a3):
-            return (x -self.v3) / (self.v1 + self.v2)
+            return self._solve_quadratic(x, self.v1, self.v2, self.v3, False)
 
         return 0.0
 
+    def _solve_quadratic(self, x: float, a: float, b: float, c: float, sign: bool = True) -> float:
+        if sign is True:
+            return (-b + math.sqrt(b*b - 4*a*(c - x))) / (2*a)
+        else:
+            return (-b - math.sqrt(b*b - 4*a*(c - x))) / (2*a)
+
     @override
     def alpha_cut_left(self, alpha: float) -> float:
-        return (self.u1 + self.u2) * alpha + self.u3
+        return self.u1 * alpha * alpha + self.u2 * alpha + self.u3
 
     @override
     def alpha_cut_right(self, alpha: float) -> float:
-        return (self.v1 + self.v2) * alpha + self.v3
+        return self.v1 * alpha * alpha + self.v2 * alpha + self.v3

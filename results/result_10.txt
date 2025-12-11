@@ -1,0 +1,7 @@
+amount=1000, left=1, right=1000, precision=100, step=1.0
+                       | Manhattan distance | Euclidean distance | Cosine similarity | Min-Max similarity
+-----------------------+--------------------+--------------------+-------------------+-------------------
+Naive                  |       4.0883443530 |       0.4944598114 |        99.696077% |         92.135847%
+Standard approximation |       4.0883263350 |       0.4944482145 |        99.696105% |         92.135879%
+Extension principle    |       0.1282227177 |       0.0207003237 |        99.994976% |         99.740292%
+func:'main' took: 8288.9217722416 sec

@@ -1,5 +1,5 @@
 import numpy as np
-from triangular_number import TriangularNumber
+from ..triangular_number import TriangularNumber
 
 def calculate_alpha_cut_diff(tn_naive: "TriangularNumber", tn_alpha_cut: "TriangularNumber", precision: float = 100):
     alpha_points = np.linspace(0, 1, precision+1)

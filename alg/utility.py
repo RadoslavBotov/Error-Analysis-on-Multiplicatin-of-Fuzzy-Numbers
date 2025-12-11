@@ -15,8 +15,8 @@ def timing(f):
         time_start = time.time()
         result = f(*args, **kwargs)
         time_end = time.time()
-        print('func:%r took: %2.4f sec' % \
-          (f.__name__, time_end - time_start))
+        print('func:%r took: %2.10f sec' % \
+        (f.__name__, time_end - time_start))
         return result
     return wrap
 
@@ -25,12 +25,20 @@ def make_task_list(l, parts):
     k, m = divmod(len(l), n)
     return [l[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n)]
 
-def plot_tn(tn: TriangularNumber, *, label: str|None = None, precision : int = 100, show: bool = False) -> None:
+# @timing
+def plot_tn(tn: TriangularNumber, *, label: str|None = None, precision : int = 100) -> None:
     x_points = np.linspace(tn.a1 - 1, tn.a3 + 1, precision)
     y_points = np.vectorize(lambda x : tn.membership(x))(x_points)
     plt.plot(x_points, y_points, label=(str(tn.u.__class__)[-7:-2] if label is None else label))
     plt.legend(loc="upper right")
-    if (show is True): plt.show()
+
+def plot_tn_alpha(tn: TriangularNumber, *, label: str|None = None, precision : int = 100) -> None:
+    y_points = np.linspace(0, 1, precision)
+    x_1_points = np.vectorize(lambda x : tn.alpha_cut_left(x))(y_points)
+    x_2_points = np.vectorize(lambda x : tn.alpha_cut_right(x))(y_points)
+    plt.plot(x_1_points, y_points, label=(str(tn.u.__class__)[-7:-2] if label is None else label))
+    plt.plot(x_2_points, y_points, label=(str(tn.u.__class__)[-7:-2] if label is None else label))
+    plt.legend(loc="upper right")
 
 def generate_random_tn(left: int, right: int, use_float: bool = False) -> TriangularNumber:
     if (use_float is True):
@@ -43,7 +51,8 @@ def generate_random_tn(left: int, right: int, use_float: bool = False) -> Triang
         a3 = random.randint(a2+1, right)
     return TriangularNumber(a1, a2, a3)
 
-def minkowski_distance(tn1: TriangularNumber, tn2: TriangularNumber, w: int = 1, precision: float = 100) -> float:
+@timing
+def minkowski_distance_tn(tn1: TriangularNumber, tn2: TriangularNumber, w: int = 1, precision: float = 100) -> float:
     # Generalization of Manhattan distance (w = 1) and Euclidean distance (w = 2).
     x_range = np.linspace(tn1.a1, tn2.a3, precision)
     y_range_tn1 = [tn1.membership(x) for x in x_range]
@@ -53,7 +62,7 @@ def minkowski_distance(tn1: TriangularNumber, tn2: TriangularNumber, w: int = 1,
 def minkowski_distance(y_range_tn1: list[float], y_range_tn2: list[float], w: int = 1) -> float:
     return (sum(abs(y1 - y2)**w for y1, y2 in zip(y_range_tn1, y_range_tn2)))**(1./w)
 
-def cosine_similarity(tn1: TriangularNumber, tn2: TriangularNumber, precision: float = 100) -> float:
+def cosine_similarity_tn(tn1: TriangularNumber, tn2: TriangularNumber, precision: float = 100) -> float:
     x_range = np.linspace(tn1.a1, tn2.a3, precision)
     y_range_tn1 = [float(tn1.membership(x)) for x in x_range]
     y_range_tn2 = [float(tn2.membership(x)) for x in x_range]
@@ -68,7 +77,7 @@ def cosine_similarity(y_range_tn1: list[float], y_range_tn2: list[float]) -> flo
     except ZeroDivisionError:
         return 0.0
 
-def min_max_similarity(tn1: TriangularNumber, tn2: TriangularNumber, precision: float = 100) -> float:
+def min_max_similarity_tn(tn1: TriangularNumber, tn2: TriangularNumber, precision: float = 100) -> float:
     x_range = np.linspace(tn1.a1, tn2.a3, precision)
     y_range_tn1 = [tn1.membership(x) for x in x_range]
     y_range_tn2 = [tn2.membership(x) for x in x_range]

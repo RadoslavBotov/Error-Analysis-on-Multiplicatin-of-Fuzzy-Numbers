@@ -1,8 +1,10 @@
 import argparse
 import itertools
 import multiprocessing
+import string
 
 import numpy as np
+import tqdm
 
 from triangular_number import TriangularNumber
 from utility import cosine_similarity, load_triangular_numbers, min_max_similarity, minkowski_distance, timing
@@ -26,6 +28,13 @@ def validate_arguments(precision: int) -> tuple[int]:
     if (precision < 10):
         precision = 10
     return precision
+
+def format_filename(file_name: str) -> str:
+    l = ["".join(t for t in token if (t.isnumeric() is True)) for token in file_name.split('_')]
+    amount = int(l[2])
+    left = int(l[3])
+    right = int(l[4])
+    return f"{amount=}, {left=}, {right=}"
 
 def calculate_multiplications(tn1: TriangularNumber, tn2: TriangularNumber, precision: int, step: float = 0.1):
     # calc different mul methods
@@ -58,34 +67,32 @@ def calculate_distance_errors(triangular_numbers: list[tuple[TriangularNumber, T
         pool.apply_async(func=calculate_multiplications, args=(tn1, tn2, precision, step))
         for tn1, tn2 in triangular_numbers
     ]
-    multiplication_results = [mr.get() for mr in multiplication_results]
-    # restore a list of y_values for each method
-    # y_range_tn_n, y_range_tn_a, y_range_tn_s, y_range_tn_e = zip(*multiplication_results)
-
-    # Naive and Alpha-cut
+    multiplication_results = [mr.get() for mr in tqdm.tqdm(multiplication_results)]
+    
+    # Alpha-cut and Naive
     distance_results = [
-        pool.apply_async(func=calculate_distances, args=(y_n, y_a))
+        pool.apply_async(func=calculate_distances, args=(y_a, y_n))
         for y_n, y_a, _, _ in multiplication_results
     ]
-    distance_results = [dr.get() for dr in distance_results]
+    distance_results = [dr.get() for dr in tqdm.tqdm(distance_results)]
     err1, err2, err3, err4 = zip(*distance_results)
 
-    # Naive and Standard Approximation
+    # Alpha-cut and Standard Approximation
     distance_results = [
-        pool.apply_async(func=calculate_distances, args=(y_n, y_s))
-        for y_n, _, y_s, _ in multiplication_results
+        pool.apply_async(func=calculate_distances, args=(y_a, y_s))
+        for _, y_a, y_s, _ in multiplication_results
     ]
-    distance_results = [dr.get() for dr in distance_results]
+    distance_results = [dr.get() for dr in tqdm.tqdm(distance_results)]
     err5, err6, err7, err8 = zip(*distance_results)
 
-    # Naive and Alpha-cut
+    # Alpha-cut and Extension Principle
     distance_results = [
-        pool.apply_async(func=calculate_distances, args=(y_n, y_e))
-        for y_n, _, _, y_e in multiplication_results
+        pool.apply_async(func=calculate_distances, args=(y_a, y_e))
+        for _, y_a, _, y_e in multiplication_results
     ]
-    distance_results = [dr.get() for dr in distance_results]
+    distance_results = [dr.get() for dr in tqdm.tqdm(distance_results)]
     err9, err10, err11, err12 = zip(*distance_results)
-
+    
     pool.close()
     pool.join()
     
@@ -100,7 +107,6 @@ def main():
     # np.set_printoptions(linewidth=150, suppress=True)
     parser = init_parser()
     file_name, precision, step = parse_arguments(parser)
-    # step=1
     precision = validate_arguments(precision)
 
     triangular_numbers = load_triangular_numbers(file_name)
@@ -113,10 +119,10 @@ def main():
     ]
     res = calculate_distance_errors(triangular_numbers, precision, step)
     
-    print(f"{file_name=}, {precision=}, {step=}")
+    print(f"{format_filename(file_name)}, {precision=}, {step=}")
     print( "                       | Manhattan distance | Euclidean distance | Cosine similarity | Min-Max similarity")
     print( "-----------------------+--------------------+--------------------+-------------------+-------------------")
-    print(f"Alpha-cut              | {res[0][0]:18.10f} | {res[0][1]:18.10f} | {res[0][2]:17.6%} | {res[0][3]:18.6%}")
+    print(f"Naive                  | {res[0][0]:18.10f} | {res[0][1]:18.10f} | {res[0][2]:17.6%} | {res[0][3]:18.6%}")
     print(f"Standard approximation | {res[1][0]:18.10f} | {res[1][1]:18.10f} | {res[1][2]:17.6%} | {res[1][3]:18.6%}")
     print(f"Extension principle    | {res[2][0]:18.10f} | {res[2][1]:18.10f} | {res[2][2]:17.6%} | {res[2][3]:18.6%}")
 
@@ -124,20 +130,11 @@ if __name__ == "__main__":
     main()
     print()
 
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt -precision 100
-
-# python .\tn_distance.py -file data\\triangular_numbers_f_a100_l1_r100.txt
-# python .\tn_distance.py -file data\\triangular_numbers_f_a100_l1_r100.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_f_a1000_l1_r100.txt
-# python .\tn_distance.py -file data\\triangular_numbers_f_a1000_l1_r100.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_f_a100_l1_r1000.txt
-# python .\tn_distance.py -file data\\triangular_numbers_f_a100_l1_r1000.txt -precision 100
-# python .\tn_distance.py -file data\\triangular_numbers_f_a1000_l1_r1000.txt
-# python .\tn_distance.py -file data\\triangular_numbers_f_a1000_l1_r1000.txt -precision 100
+# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt -precision 100 -s 1
