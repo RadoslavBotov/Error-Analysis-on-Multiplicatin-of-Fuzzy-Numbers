@@ -2,8 +2,8 @@ import argparse
 from tqdm.contrib import itertools
 import numpy as np
 
-from triangular_number import TriangularNumber
-from utility import load_triangular_numbers, timing
+from alg.triangular_number import TriangularNumber
+from alg.utility import load_triangular_numbers, timing
 
 
 def init_parser() -> "argparse.ArgumentParser":
@@ -75,24 +75,14 @@ def main():
     print("Right error:", np.average(err_r_all))
 
 
-
 if __name__ == "__main__":
     main()
 
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a100_l1_r100.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a100_l1_r100.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a1000_l1_r100.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a1000_l1_r100.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a100_l1_r1000.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a100_l1_r1000.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a1000_l1_r1000.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_a1000_l1_r1000.txt -precision 100
-
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a100_l1_r100.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a100_l1_r100.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a1000_l1_r100.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a1000_l1_r100.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a100_l1_r1000.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a100_l1_r1000.txt -precision 100
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a1000_l1_r1000.txt
-# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_f_a1000_l1_r1000.txt -precision 100
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_100_1_100.txt
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_100_1_100.txt -precision 100
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_1000_1_100.txt
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_1000_1_100.txt -precision 100
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_100_1_1000.txt
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_100_1_1000.txt -precision 100
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_1000_1_1000.txt
+# python .\tn_alpha_cut_error.py -file data\\triangular_numbers_1000_1_1000.txt -precision 100

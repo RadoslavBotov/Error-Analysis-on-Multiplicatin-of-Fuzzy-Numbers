@@ -5,8 +5,8 @@ import sys
 import time
 from matplotlib import pyplot as plt
 import numpy as np
-from membership_functions.membership_function_alpha import MembershipFunctionAlpha
-from triangular_number import TriangularNumber
+from .membership_functions.membership_function_alpha import MembershipFunctionAlpha
+from .triangular_number import TriangularNumber
 
 
 def timing(f):
@@ -31,6 +31,9 @@ def plot_tn(tn: TriangularNumber, *, label: str|None = None, precision : int = 1
     y_points = np.vectorize(lambda x : tn.membership(x))(x_points)
     plt.plot(x_points, y_points, label=(str(tn.u.__class__)[-7:-2] if label is None else label))
     plt.legend(loc="upper right")
+
+def plot_show():
+    plt.show()
 
 def plot_tn_alpha(tn: TriangularNumber, *, label: str|None = None, precision : int = 100) -> None:
     y_points = np.linspace(0, 1, precision)

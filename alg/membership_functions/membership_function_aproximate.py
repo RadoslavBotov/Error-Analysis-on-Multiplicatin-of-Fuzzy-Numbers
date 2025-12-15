@@ -1,4 +1,3 @@
-import math
 from typing import override
 from .membership_function_base import MembershipFunction
 

@@ -3,7 +3,7 @@
 import argparse
 import random
 
-from utility import generate_random_tn, save_triangular_numbers, timing
+from alg.utility import generate_random_tn, save_triangular_numbers
 
 
 def init_parser() -> "argparse.ArgumentParser":
@@ -40,12 +40,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python .\tn_generate.py -f .\data\triangular_numbers_a100_l1_r100.txt -a 100 -l 1 -r 100 -s 0123456789
-# python .\tn_generate.py -f .\data\triangular_numbers_a1000_l1_r100.txt -a 1000 -l 1 -r 100 -s 0123456789
-# python .\tn_generate.py -f .\data\triangular_numbers_a100_l1_r1000.txt -a 100 -l 1 -r 1000 -s 0123456789
-# python .\tn_generate.py -f .\data\triangular_numbers_a1000_l1_r1000.txt -a 1000 -l 1 -r 1000 -s 0123456789
-
-# python .\tn_generate.py -f .\data\triangular_numbers_f_a100_l1_r100.txt -a 100 -l 1 -r 100 -s 0123456789 -uf True
-# python .\tn_generate.py -f .\data\triangular_numbers_f_a1000_l1_r100.txt -a 1000 -l 1 -r 100 -s 0123456789 -uf True
-# python .\tn_generate.py -f .\data\triangular_numbers_f_a100_l1_r1000.txt -a 100 -l 1 -r 1000 -s 0123456789 -uf True
-# python .\tn_generate.py -f .\data\triangular_numbers_f_a1000_l1_r1000.txt -a 1000 -l 1 -r 1000 -s 0123456789 -uf True
+# python .\tn_generate.py -f .\data\triangular_numbers_100_1_100.txt -a 100 -l 1 -r 100 -s 0123456789
+# python .\tn_generate.py -f .\data\triangular_numbers_1000_1_100.txt -a 1000 -l 1 -r 100 -s 0123456789
+# python .\tn_generate.py -f .\data\triangular_numbers_100_1_1000.txt -a 100 -l 1 -r 1000 -s 0123456789
+# python .\tn_generate.py -f .\data\triangular_numbers_1000_1_1000.txt -a 1000 -l 1 -r 1000 -s 0123456789

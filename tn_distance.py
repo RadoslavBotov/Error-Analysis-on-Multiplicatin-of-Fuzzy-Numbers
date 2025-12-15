@@ -1,13 +1,11 @@
 import argparse
-import itertools
 import multiprocessing
-import string
 
 import numpy as np
 import tqdm
 
-from triangular_number import TriangularNumber
-from utility import cosine_similarity, load_triangular_numbers, min_max_similarity, minkowski_distance, timing
+from alg.triangular_number import TriangularNumber
+from alg.utility import cosine_similarity, load_triangular_numbers, min_max_similarity, minkowski_distance, timing
 
 
 def init_parser() -> "argparse.ArgumentParser":
@@ -130,11 +128,11 @@ if __name__ == "__main__":
     main()
     print()
 
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r100.txt -precision 100 -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r100.txt -precision 100 -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a100_l1_r1000.txt -precision 100 -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt -s 1
-# python .\tn_distance.py -file data\\triangular_numbers_a1000_l1_r1000.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_100_1_100.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_100_1_100.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_1000_1_100.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_1000_1_100.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_100_1_1000.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_100_1_1000.txt -precision 100 -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_1000_1_1000.txt -s 1
+# python .\tn_distance.py -file data\\triangular_numbers_1000_1_1000.txt -precision 100 -s 1
